@@ -10,7 +10,5 @@ d = { 'settings': { 'branch': 'main',
                                                        'CloudWatchLogs2Pandas.CloudWatchQuery.CloudWatchQuery.__init__': ( 'cloudwatchquery.html#cloudwatchquery.__init__',
                                                                                                                            'CloudWatchLogs2Pandas/CloudWatchQuery.py'),
                                                        'CloudWatchLogs2Pandas.CloudWatchQuery.CloudWatchQuery.get_df': ( 'cloudwatchquery.html#cloudwatchquery.get_df',
-                                                                                                                         'CloudWatchLogs2Pandas/CloudWatchQuery.py'),
-                                                       'CloudWatchLogs2Pandas.CloudWatchQuery.foo': ( 'cloudwatchquery.html#foo',
-                                                                                                      'CloudWatchLogs2Pandas/CloudWatchQuery.py')},
+                                                                                                                         'CloudWatchLogs2Pandas/CloudWatchQuery.py')},
             'CloudWatchLogs2Pandas.core': {'CloudWatchLogs2Pandas.core.foo': ('core.html#foo', 'CloudWatchLogs2Pandas/core.py')}}}
