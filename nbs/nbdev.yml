@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "CloudWatchLogs2Pandas"
+  site-url: "https://guyernest.github.io/CloudWatchLogs2Pandas"
+  description: "Library to query CloudWatch Logs and create Pandas DataFrame from the results"
+  repo-branch: main
+  repo-url: "https://github.com/guyernest/CloudWatchLogs2Pandas"
