@@ -10,8 +10,8 @@ jobs:
     steps:
       - name: Configure AWS credentials from Test account
         uses: aws-actions/configure-aws-credentials@v1
-      	with:
+        with:
           role-to-assume: arn:aws:iam::327163837055:role/GitHubActions4NBDev
           aws-region: us-west-2
       - name: Run tests 
-	uses: fastai/workflows/nbdev-ci@master
+        uses: fastai/workflows/nbdev-ci@master
