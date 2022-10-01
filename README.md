@@ -17,7 +17,72 @@ pip install CloudWatchLogs2Pandas
 Fill me in please! Don’t forget code examples:
 
 ``` python
-1+1
+query = 'fields @timestamp, @message | sort @timestamp desc | limit 5'
+log_group = '/aws/apigateway/welcome'
 ```
 
-    2
+``` python
+cwq = CloudWatchQuery(query, log_group)
+```
+
+``` python
+cwq.get_df()
+```
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>timestamp</th>
+      <th>message</th>
+      <th>ptr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2021-12-20 11:03:13.568</td>
+      <td>Cloudwatch logs enabled for API Gateway</td>
+      <td>CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2021-11-24 15:10:19.572</td>
+      <td>Cloudwatch logs enabled for API Gateway</td>
+      <td>CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2021-11-01 15:57:57.790</td>
+      <td>Cloudwatch logs enabled for API Gateway</td>
+      <td>CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2021-11-01 15:37:36.574</td>
+      <td>Cloudwatch logs enabled for API Gateway</td>
+      <td>CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2021-10-30 23:10:28.807</td>
+      <td>Cloudwatch logs enabled for API Gateway</td>
+      <td>CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
