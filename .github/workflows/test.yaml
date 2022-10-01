@@ -4,4 +4,14 @@ on:  [workflow_dispatch, pull_request, push]
 jobs:
   test:
     runs-on: ubuntu-latest
-    steps: [uses: fastai/workflows/nbdev-ci@master]
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: read  # This is required for actions/checkout
+    steps:
+      - name: Configure AWS credentials from Test account
+        uses: aws-actions/configure-aws-credentials@v1
+      	with:
+          role-to-assume: arn:aws:iam::327163837055:role/GitHubActions4NBDev
+          aws-region: us-west-2
+      - name: Run tests 
+	uses: fastai/workflows/nbdev-ci@master
