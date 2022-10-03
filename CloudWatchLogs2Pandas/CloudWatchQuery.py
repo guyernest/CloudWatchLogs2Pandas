@@ -3,22 +3,43 @@
 # %% auto 0
 __all__ = ['CloudWatchQuery']
 
-# %% ../nbs/00_CloudWatchQuery.ipynb 13
+# %% ../nbs/00_CloudWatchQuery.ipynb 14
 import awswrangler as wr
 import pandas as pd
+from datetime import datetime, timedelta
 import boto3
 
 class CloudWatchQuery:
     "Configure a  CloudWatch query"
-    def __init__(self, query, log_group): 
+    def __init__(self, query:str, log_group:str): 
         self.query = query 
-        self.log_group = log_group
+        self.log_groups = []
+        self.log_groups.append(log_group)
+        self.region = "us-west-2"
         
-    def get_df(self):
+    def add_log_group(self, log_group:str):
+        self.log_groups.append(log_group)
+        
+    def get_df(self, 
+              days_start:int = 14, # number of days in the past to start
+              hours_start:int = 0, # number of hours in the past to start
+              days_end:int = 0, # number of days in the past to end
+              hours_end:int = 0): # number of hours in the past to end
         "Execute the query"
         df = wr.cloudwatch.read_logs(
-            log_group_names=[self.log_group],
+            log_group_names=self.log_groups,
             query=self.query,
-            boto3_session = boto3.Session(region_name="us-west-2")
+            start_time=datetime.now()- timedelta(days=days_start, hours=hours_start),
+            end_time=datetime.now()- timedelta(days=days_end, hours=hours_end),
+
+            boto3_session = boto3.Session(region_name=self.region)
         )
         return df
+
+# %% ../nbs/00_CloudWatchQuery.ipynb 15
+from fastcore.foundation import patch
+
+@patch
+def set_region(self:CloudWatchQuery, region:str):
+    "Set the region of the query."
+    self.region = region

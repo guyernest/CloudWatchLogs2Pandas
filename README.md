@@ -14,7 +14,8 @@ pip install CloudWatchLogs2Pandas
 
 ## How to use
 
-Fill me in please! Don’t forget code examples:
+You need to build your query based on the documentations
+[here](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html):
 
 ``` python
 query = 'fields @timestamp, @message | sort @timestamp desc | limit 5'
@@ -25,8 +26,43 @@ log_group = '/aws/apigateway/welcome'
 cwq = CloudWatchQuery(query, log_group)
 ```
 
+When executing the query against the log group, the default time range
+of of 14 days.
+
 ``` python
 cwq.get_df()
+```
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div>
+
+In case you have no results, you can modify the time range. For example
+for `Last Year` you can use:
+
+``` python
+cwq.get_df(days_start=365)
 ```
 
 <div>
@@ -83,6 +119,47 @@ cwq.get_df()
       <td>Cloudwatch logs enabled for API Gateway</td>
       <td>CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...</td>
     </tr>
+  </tbody>
+</table>
+</div>
+
+### Additional configurations
+
+You can set the [AWS
+region](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html)
+with:
+
+``` python
+cwq.set_region("us-west-2")
+```
+
+More complicated time range:
+
+``` python
+cwq.get_df(days_start=2, hours_start=4, hours_end=4)
+```
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
   </tbody>
 </table>
 </div>
