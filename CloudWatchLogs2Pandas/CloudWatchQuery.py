@@ -20,6 +20,9 @@ class CloudWatchQuery:
     def add_log_group(self, log_group:str):
         self.log_groups.append(log_group)
         
+    def set_region(self, region:str):
+        self.region = region
+
     def get_df(self, 
               days_start:int = 14, # number of days in the past to start
               hours_start:int = 0, # number of hours in the past to start
