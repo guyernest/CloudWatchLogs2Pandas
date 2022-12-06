@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "CloudWatchLogs2Pandas",
+    "section": "",
+    "text": "This file will become your README and also the index of your documentation."
+  },
+  {
+    "objectID": "index.html#install",
+    "href": "index.html#install",
+    "title": "CloudWatchLogs2Pandas",
+    "section": "Install",
+    "text": "Install\npip install CloudWatchLogs2Pandas"
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "CloudWatchLogs2Pandas",
+    "section": "How to use",
+    "text": "How to use\nYou need to build your query based on the documentations here:\n\nquery = 'fields @timestamp, @message | sort @timestamp desc | limit 5'\nlog_group = '/aws/apigateway/welcome'\n\n\ncwq = CloudWatchQuery(query, log_group)\n\nWhen executing the query against the log group, the default time range of of 14 days.\n\ncwq.get_df()\n\n\n\n\n\n  \n    \n      \n    \n  \n  \n  \n\n\n\n\nIn case you have no results, you can modify the time range. For example for Last Year you can use:\n\ncwq.get_df(days_start=365)\n\n\n\n\n\n  \n    \n      \n      timestamp\n      message\n      ptr\n    \n  \n  \n    \n      0\n      2021-12-20 11:03:13.568\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...\n    \n    \n      1\n      2021-11-24 15:10:19.572\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...\n    \n    \n      2\n      2021-11-01 15:57:57.790\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...\n    \n    \n      3\n      2021-11-01 15:37:36.574\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...\n    \n    \n      4\n      2021-10-30 23:10:28.807\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...\n    \n  \n\n\n\n\n\nAdditional configurations\nYou can set the AWS region with:\n\ncwq.set_region(\"us-west-2\")\n\nMore complicated time range:\n\ncwq.get_df(days_start=2, hours_start=4, hours_end=4)"
+  },
+  {
+    "objectID": "cloudwatchquery.html",
+    "href": "cloudwatchquery.html",
+    "title": "CloudWatchQuery",
+    "section": "",
+    "text": "CloudWatch Logs support a simple query language, which we can use to search for different pattern in the logs.\nWe will start with some examples and then create the classes and functions to perform these queries.\n\nsimple_query = f'''\nfields @timestamp, @message\n| sort @timestamp desc\n| limit 20 \n'''\n\n\ncomplex_query = f'''\nfilter @message like /GOING TO RUN SKILL/ \n| parse @message '\"*\" for SESSION *:* with PARAMETERS' as @skill, @channel, @id \n| stats count(@channel) by @skill\n'''\n\n\nfrom datetime import datetime, timedelta\nimport time\n\n\n\n\nWARNING: Error parsing requirements for nbconvert: [Errno 2] No such file or directory: '/Users/guy/opt/anaconda3/lib/python3.8/site-packages/nbconvert-6.0.7.dist-info/METADATA'\nNote: you may need to restart the kernel to use updated packages.\n\n\n\nimport awswrangler as wr\nimport pandas as pd\nfrom datetime import datetime\n\n\nLOG_GROUP_NAME = '/aws/apigateway/welcome'\n\n\nimport boto3\nboto3.setup_default_session(region_name=\"us-east-2\")\n\n\ndf = wr.cloudwatch.read_logs(\n    log_group_names=[LOG_GROUP_NAME],\n    query=\"fields @timestamp, @message | sort @timestamp desc | limit 5\",\n    boto3_session = boto3.Session(region_name=\"us-west-2\")\n)\n\n\ndf\n\n\n\n\n\n  \n    \n      \n      timestamp\n      message\n      ptr\n    \n  \n  \n    \n      0\n      2021-12-20 11:03:13.568\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...\n    \n    \n      1\n      2021-11-24 15:10:19.572\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...\n    \n    \n      2\n      2021-11-01 15:57:57.790\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...\n    \n    \n      3\n      2021-11-01 15:37:36.574\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...\n    \n    \n      4\n      2021-10-30 23:10:28.807\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...\n    \n  \n\n\n\n\n\ndatetime.today()- timedelta(days=14)\n\ndatetime.datetime(2022, 9, 18, 17, 11, 43, 891593)\n\n\n\nsource\n\n\n\n CloudWatchQuery (query:str, log_group:str)\n\nConfigure a CloudWatch query\n\nsource\n\n\n\n\n CloudWatchQuery.set_region (region:str)\n\nSet the region of the query.\n\ncwq = CloudWatchQuery(simple_query, LOG_GROUP_NAME)\n\n\ncwq.get_df()\n\n\n\n\n\n  \n    \n      \n    \n  \n  \n  \n\n\n\n\n\ncwq.get_df(days_start=365, hours_start=7)\n\n\n\n\n\n  \n    \n      \n      timestamp\n      message\n      ptr\n    \n  \n  \n    \n      0\n      2021-12-20 11:03:13.568\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...\n    \n    \n      1\n      2021-11-24 15:10:19.572\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...\n    \n    \n      2\n      2021-11-01 15:57:57.790\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...\n    \n    \n      3\n      2021-11-01 15:37:36.574\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...\n    \n    \n      4\n      2021-10-30 23:10:28.807\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...\n    \n    \n      5\n      2021-10-25 17:55:32.019\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS...\n    \n    \n      6\n      2021-10-25 15:46:26.526\n      Cloudwatch logs enabled for API Gateway\n      CmAKKAokMzI3MTYzODM3MDU1Oi9hd3MvYXBpZ2F0ZXdheS..."
+  }
+]
